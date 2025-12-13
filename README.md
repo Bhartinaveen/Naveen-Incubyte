@@ -88,4 +88,4 @@ Screenshot of the application:
 
 
 
-<video controls src="video.mp4" title="Title"></video>
+<video controls src="video.mp4" title="Title" controls width="600"></video>
