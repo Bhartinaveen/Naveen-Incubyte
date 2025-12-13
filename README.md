@@ -88,4 +88,5 @@ Screenshot of the application:
 
 
 
-<video controls src="video.mp4" width="800"></video>
+### Demo Video
+[🎥 Click here to watch the demo video](video.mp4)
