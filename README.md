@@ -88,4 +88,4 @@ Screenshot of the application:
 
 
 
-<video controls src="video.webp" title="Title" controls width="600"></video>
+<video controls src="video.mp4" width="800"></video>
