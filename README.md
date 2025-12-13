@@ -86,6 +86,6 @@ Screenshot of the application:
 ![alt text](image-5.png)
 ![alt text](screencapture-localhost-3000-sweets-693dcbcb47236a2b63a64463-2025-12-14-02_58_28.png)
 
-
+![alt text](video.webp)
 
 <video controls src="video.mp4" title="Title" controls width="600"></video>
