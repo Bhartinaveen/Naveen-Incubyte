@@ -2,6 +2,8 @@
 
 A full-stack e-commerce application for managing and selling sweets, featuring a modern, responsive UI, dynamic search, cart functionality, and a comprehensive admin dashboard with analytics.
 
+### Demo Video
+[🎥 Click here to watch the demo video](https://drive.google.com/file/d/1AdTG6auLzUCqN0cDwZQ-1M0QPpq7MKoq/view?usp=drivesdk)
 
 ## ✨ Features
 
@@ -88,5 +90,3 @@ Screenshot of the application:
 
 
 
-### Demo Video
-[🎥 Click here to watch the demo video](video.mp4)
