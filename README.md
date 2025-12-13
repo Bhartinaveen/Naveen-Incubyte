@@ -88,4 +88,4 @@ Screenshot of the application:
 
 
 
-<video controls src="Screen Recording 2025-12-14 030213.mp4" title="Title"></video>
+<video controls src="video.mp4" title="Title"></video>
