@@ -101,6 +101,10 @@ Screenshot of website :
 ![alt text](image-10.png)
 ![alt text](screencapture-localhost-3000-admin-analytics-2025-12-14-17_12_15.png)
 
+3. CustomerReviews Section 
+![alt text](screencapture-localhost-3000-sweets-693dcbcb47236a2b63a64463-2025-12-14-17_35_07.png)
+
+
 ## Video Demo
 
 ### Watch the Application Walkthrough
