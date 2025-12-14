@@ -71,7 +71,13 @@ router.get('/myorders', auth, async (req, res) => {
 router.get('/admin', auth, async (req, res) => {
     try {
         if (req.user.role !== 'admin') return res.status(403).json({ message: 'Admin access required' });
-        const orders = await Order.find().populate('user', 'username').sort({ createdAt: -1 });
+        const orders = await Order.find()
+            .populate('user', 'username mobile')
+            .populate({
+                path: 'items.sweet',
+                select: 'category name' // Get category and name
+            })
+            .sort({ createdAt: -1 });
         res.json(orders);
     } catch (err) {
         res.status(500).json({ message: 'Server error', error: err.message });
@@ -89,6 +95,15 @@ router.put('/:id/status', auth, async (req, res) => {
             { status },
             { new: true }
         );
+
+        // Create Notification
+        const Notification = require('../models/Notification');
+        const notification = new Notification({
+            user: order.user,
+            message: `Your Order #${order._id} is now ${status.toUpperCase()}.`,
+        });
+        await notification.save();
+
         res.json(order);
     } catch (err) {
         res.status(500).json({ message: 'Server error', error: err.message });

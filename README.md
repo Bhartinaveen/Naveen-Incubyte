@@ -1,92 +1,104 @@
-# 🍬 Sweet Shop Management System
+# Sweet Shop Management System
 
-A full-stack e-commerce application for managing and selling sweets, featuring a modern, responsive UI, dynamic search, cart functionality, and a comprehensive admin dashboard with analytics.
+A full-stack e-commerce web application designed for browsing, purchasing, and managing sweet products. This project features a responsive storefront for customers and a comprehensive admin panel for inventory and sales management.
 
-### Demo Video
-[🎥 Click here to watch the demo video](https://drive.google.com/file/d/1AdTG6auLzUCqN0cDwZQ-1M0QPpq7MKoq/view?usp=drivesdk)
+## Tech Stack
 
-## ✨ Features
-
-### 🛍️ User Features
-*   **Product Catalog**: Browse a variety of sweets with details (Image, Price, Reviews).
-*   **Advanced Search & Filter**: Filter products by Category, Price Range, and Name.
-*   **Shopping Cart**: Add items, view summary, and checkout.
-*   **Order History**: creating orders and viewing past purchases.
-*   **Reviews**: Rate and review products.
-
-### 🛡️ Admin Features
-*   **Inventory Management**: Add, Edit, and Delete products.
-*   **Order Management**: View all orders and update statuses.
-*   **Analytics Dashboard**: Visual charts for Sales & Profits (Daily/Monthly/Yearly) using `recharts`.
-*   **Secure Access**: Role-based authentication (Admin/User).
-
-## 🛠️ Technology Stack
-*   **Frontend**: Next.js (React), CSS Modules (Glassmorphism design).
+*   **Frontend**: Next.js (React framework), CSS Modules for styling.
 *   **Backend**: Node.js, Express.js.
-*   **Database**: MongoDB (with Mongoose).
-*   **Authentication**: JWT (JSON Web Tokens).
+*   **Database**: MongoDB (Mongoose ODM).
+*   **Authentication**: JSON Web Tokens (JWT).
 
-## 🚀 Setup Instructions
+## Key Features
+
+### For Customers
+*   **Product Browsing**: Search and filter sweets by category, price range, and name.
+*   **Shopping Cart**: Add items, adjust quantities, and checkout.
+*   **User Profile**: Manage personal details (Address, Mobile, etc.) and view order history.
+*   **Live Notifications**: Receive real-time alerts when your order status changes (e.g., Shipped, Delivered).
+
+### For Admins
+*   **Dashboard Analytics**: Visualize sales trends, profit by category, and daily product volume.
+*   **Inventory Management**: Create, update, and delete products (including image support).
+*   **Order Management**: View detailed customer orders and update shipping status.
+*   **Secure Access**: Role-based routing ensures only admins can access sensitive panels.
+
+## Getting Started
+
+Follow these steps to run the project locally.
 
 ### Prerequisites
-*   Node.js (v14+)
-*   MongoDB (Running locally or via Docker)
+*   Node.js (v16 or higher recommended)
+*   MongoDB installed locally or a MongoDB Atlas connection string.
 
-### 1. Database Setup
-Ensure your MongoDB instance is running at `mongodb://127.0.0.1:27017/sweetshop` or update the `.env` file.
+### 1. Backend Setup
 
-### 2. Backend Setup
+Navigate to the backend directory and install dependencies:
+
 ```bash
 cd backend
 npm install
-# Seed the database with initial products
-node seed.js
-# Start the server
+```
+
+Create a `.env` file in the `backend` folder with the following variables:
+
+```env
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017/sweetshop
+JWT_SECRET=your_super_secret_key_here
+```
+
+Start the backend server:
+
+```bash
 npm start
 ```
-Server runs on `http://localhost:5001`.
+*The server should run on http://localhost:5000 (or the port you specified).*
 
-### 3. Frontend Setup
+### 2. Frontend Setup
+
+Open a new terminal, navigate to the frontend directory, and install dependencies:
+
 ```bash
 cd frontend
 npm install
-# Start the development server
+```
+
+Start the development server:
+
+```bash
 npm run dev
 ```
-Application runs on `http://localhost:3000`.
 
-## 📸 Usage
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-1.  **Register/Login**: Create an account.
-2.  **Shop**: Use the filters to find sweets and add them to your cart.
-3.  **Checkout**: Place an order.
-4.  **Admin Panel**: Login as an admin (Role: `admin`) to access the `Admin Panel` link in the nav bar.
-    *   **Inventory**: Manage products through the "Add/Edit" forms.
-    *   **Analytics**: View sales trends.
+## Project Structure
 
-## 🤖 My AI Usage
-This project was built with the assistance of **Antigravity**, a Google DeepMind AI agent.
+*   **/backend**: Express API, Database models, and routes.
+*   **/frontend**: Next.js application, components, and pages.
 
-*   **Code Generation**: usage of `replace_file_content` and `write_to_file` to generate the entire backend API, database models, and frontend components.
-*   **Debugging**: The agent identified and fixed issues like "sweets.map is not a function" (API error handling) and "Inventory undefined" errors.
-*   **Design**: The user interface features a custom "Glassmorphism" style implemented by the agent via CSS Modules.
-*   **Feature Implementation**: Complex features like the Analytics Dashboard (charts) and Advanced Filtering were planned and executed by the AI.
+## License
 
----
-Screenshot of the application: 
-![alt text](screencapture-localhost-3000-2025-12-14-02_51_24.png)
+This project is open-source and available under the MIT License.
 
-![alt text](image.png)
+Screenshot of website :
+1. For User
 
-![alt text](image-1.png)
+![alt text](image-6.png)
+![alt text](image-7.png)
+![alt text](screencapture-localhost-3000-2025-12-14-17_01_58.png)
+![alt text](screencapture-localhost-3000-profile-2025-12-14-17_03_18.png)
+![alt text](image-8.png)
+![alt text](screencapture-localhost-3000-cart-2025-12-14-17_04_39.png)
+![alt text](screencapture-localhost-3000-orders-2025-12-14-17_06_15.png)
 
-![alt text](image-2.png)
+2. For Admin 
 
-![alt text](image-3.png)
-
-![alt text](image-4.png)
-![alt text](image-5.png)
-![alt text](screencapture-localhost-3000-sweets-693dcbcb47236a2b63a64463-2025-12-14-02_58_28.png)
-
+![alt text](screencapture-localhost-3000-2025-12-14-17_08_01.png)
+![alt text](screencapture-localhost-3000-admin-inventory-2025-12-14-17_08_58.png)
+![alt text](image-9.png)
+![alt text](screencapture-localhost-3000-admin-orders-2025-12-14-17_10_48.png)
+![alt text](image-10.png)
+![alt text](screencapture-localhost-3000-admin-analytics-2025-12-14-17_12_15.png)
 
 
