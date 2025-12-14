@@ -101,4 +101,12 @@ Screenshot of website :
 ![alt text](image-10.png)
 ![alt text](screencapture-localhost-3000-admin-analytics-2025-12-14-17_12_15.png)
 
+## Video Demo
+
+### Watch the Application Walkthrough
+
+[**Click here to watch the demo video**](https://drive.google.com/file/d/1AdTG6auLzUCqN0cDwZQ-1M0QPpq7MKoq/view?usp=drivesdk)
+
+*(Click the link above to watch the video demo)*
+
 
