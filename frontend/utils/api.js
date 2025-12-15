@@ -1,4 +1,4 @@
-export const API_URL = 'http://localhost:5001/api';
+export const API_URL = 'https://naveen-incubyte.vercel.app/api';
 
 export const login = async (username, password) => {
     const res = await fetch(`${API_URL}/auth/login`, {
