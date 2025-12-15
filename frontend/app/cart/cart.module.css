@@ -1,0 +1,137 @@
+.container {
+    max-width: 900px;
+    margin: 4rem auto;
+    padding: 2.5rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.5s ease-out;
+}
+
+.container h1 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #f3f4f6;
+    padding-bottom: 1rem;
+}
+
+.empty {
+    text-align: center;
+    padding: 6rem;
+    color: var(--text-secondary);
+}
+
+.empty h1 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: var(--text-primary);
+}
+
+.empty a {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: var(--shadow-md);
+}
+
+.items {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background: #f9fafb;
+    border-radius: 12px;
+    transition: transform 0.2s;
+}
+
+.item:hover {
+    transform: translateX(5px);
+    background: #f3f4f6;
+}
+
+.details h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+}
+
+.details p {
+    color: var(--text-secondary);
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.actions p {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.actions button {
+    padding: 0.5rem 1rem;
+    background: #fee2e2;
+    color: #ef4444;
+    font-weight: 600;
+}
+
+.actions button:hover {
+    background: #fecaca;
+}
+
+.summary {
+    margin-top: 3rem;
+    text-align: right;
+    border-top: 2px solid #f3f4f6;
+    padding-top: 2rem;
+}
+
+.summary h2 {
+    font-size: 1.8rem;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+.btns {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.5rem;
+}
+
+.checkout {
+    padding: 1rem 3rem;
+    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 700;
+    box-shadow: var(--shadow-md);
+}
+
+.checkout:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.clear {
+    padding: 1rem 2rem;
+    background: transparent;
+    border: 2px solid #e5e7eb;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.clear:hover {
+    border-color: #d1d5db;
+    color: var(--text-primary);
+}
