@@ -70,7 +70,7 @@ router.get('/myorders', auth, async (req, res) => {
 // Get All Orders (Admin)
 router.get('/admin', auth, async (req, res) => {
     try {
-        if (req.user.role !== 'admin') return res.status(403).json({ message: 'Admin access required' });
+        if (!['admin', 'superadmin'].includes(req.user.role)) return res.status(403).json({ message: 'Admin access required' });
         const orders = await Order.find()
             .populate('user', 'username mobile')
             .populate({
@@ -87,7 +87,7 @@ router.get('/admin', auth, async (req, res) => {
 // Update Order Status (Admin)
 router.put('/:id/status', auth, async (req, res) => {
     try {
-        if (req.user.role !== 'admin') return res.status(403).json({ message: 'Admin access required' });
+        if (!['admin', 'superadmin'].includes(req.user.role)) return res.status(403).json({ message: 'Admin access required' });
         const { status } = req.body;
 
         const order = await Order.findByIdAndUpdate(

@@ -113,7 +113,7 @@ router.put('/:id', auth, async (req, res) => {
 // Delete sweet (Admin only)
 router.delete('/:id', auth, async (req, res) => {
     try {
-        if (req.user.role !== 'admin') return res.status(403).json({ message: 'Admin access required' });
+        if (!['admin', 'superadmin'].includes(req.user.role)) return res.status(403).json({ message: 'Admin access required' });
         await Sweet.findByIdAndDelete(req.params.id);
         res.json({ message: 'Sweet deleted' });
     } catch (err) {
@@ -139,7 +139,7 @@ router.post('/:id/purchase', auth, async (req, res) => {
 // Restock sweet (Admin only)
 router.post('/:id/restock', auth, async (req, res) => {
     try {
-        if (req.user.role !== 'admin') return res.status(403).json({ message: 'Admin access required' });
+        if (!['admin', 'superadmin'].includes(req.user.role)) return res.status(403).json({ message: 'Admin access required' });
         const { quantity } = req.body;
         if (!quantity || quantity <= 0) return res.status(400).json({ message: 'Invalid quantity' });
 

@@ -22,12 +22,15 @@ mongoose.connect(MONGODB_URI)
 const authRoutes = require('./routes/auth');
 const sweetRoutes = require('./routes/sweets');
 const orderRoutes = require('./routes/orders');
+
 const notificationRoutes = require('./routes/notifications');
+const userRoutes = require('./routes/users');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/sweets', sweetRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/users', userRoutes);
 
 app.get('/', (req, res) => {
     res.send('Sweet Shop API is running');

@@ -132,3 +132,14 @@ export const markNotificationRead = async (id) => {
         method: 'PUT'
     });
 };
+
+export const getUsers = async () => {
+    return authFetch('/users');
+};
+
+export const updateUserRole = async (userId, role) => {
+    return authFetch(`/users/${userId}/role`, {
+        method: 'PUT',
+        body: JSON.stringify({ role })
+    });
+};

@@ -8,7 +8,7 @@ const auth = require('../middleware/auth');
 // Register
 router.post('/register', async (req, res) => {
     try {
-        const { username, password, email, role } = req.body;
+        const { username, password, email } = req.body;
 
         let user = await User.findOne({ username });
         if (user) return res.status(400).json({ message: 'Username already exists' });
@@ -22,8 +22,8 @@ router.post('/register', async (req, res) => {
         user = new User({
             username,
             password,
-            email: email || username + "@example.com", // Fallback for now if frontend not updated immediately
-            role
+            email: email || username + "@example.com",
+            role: 'user' // Always default to user, ignore request body
         });
         await user.save();
 

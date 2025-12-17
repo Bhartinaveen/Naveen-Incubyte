@@ -10,7 +10,7 @@ export default function AdminLayout({ children }) {
 
     useEffect(() => {
         const role = localStorage.getItem('role');
-        if (role !== 'admin') {
+        if (!['admin', 'superadmin'].includes(role)) {
             router.push('/login'); // Redirect to login if not admin
         } else {
             setAuthorized(true);
@@ -38,6 +38,9 @@ export default function AdminLayout({ children }) {
                 <ul className={styles.sidebarList}>
                     <li><Link href="/admin/inventory" className={styles.link}>Inventory</Link></li>
                     <li><Link href="/admin/orders" className={styles.link}>Orders</Link></li>
+                    {typeof window !== 'undefined' && localStorage.getItem('role') === 'superadmin' && (
+                        <li><Link href="/admin/users" className={styles.link}>Users</Link></li>
+                    )}
                     <li><Link href="/admin/analytics" className={styles.link}>Analytics</Link></li>
                     <li><Link href="/" className={styles.link}>Back to Store</Link></li>
                 </ul>

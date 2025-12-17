@@ -142,7 +142,7 @@ export default function Home() {
 
           <Link href="/cart" className={styles.cartLink}>Cart ({count})</Link>
           <Link href="/orders">Orders</Link>
-          {role === 'admin' && <Link href="/admin/inventory" style={{ color: '#d81b60', fontWeight: 'bold' }}>Admin Panel</Link>}
+          {['admin', 'superadmin'].includes(role) && <Link href="/admin/inventory" style={{ color: '#d81b60', fontWeight: 'bold' }}>Admin Panel</Link>}
 
           {token ? (
             <div className={styles.profileContainer}>

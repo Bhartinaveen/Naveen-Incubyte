@@ -8,13 +8,13 @@ export default function Register() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
-    const [role, setRole] = useState('user');
+    // Role selection removed - defaults to user
     const router = useRouter();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const data = await register(username, password, email, role);
+            const data = await register(username, password, email, 'user');
             if (data.message === 'User registered successfully') {
                 router.push('/login');
             } else {
@@ -50,10 +50,6 @@ export default function Register() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                <select value={role} onChange={(e) => setRole(e.target.value)} style={{ padding: '0.8rem', border: '1px solid #ddd', borderRadius: '5px' }}>
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
-                </select>
                 <button type="submit">Register</button>
             </form>
         </div>
