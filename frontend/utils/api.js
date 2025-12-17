@@ -1,4 +1,38 @@
-export const API_URL = 'https://naveen-incubyte.vercel.app/api';
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+
+// Helper to handle responses, specifically 401 Unauthorized
+const handleAuthResponse = async (res) => {
+    if (res.status === 401) {
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/login';
+        }
+        // Return a safe object so UI doesn't crash or show generic errors before redirect
+        return { message: 'Session expired. Redirecting to login...' };
+    }
+    return res.json();
+};
+
+// Helper for authenticated requests
+const authFetch = async (endpoint, options = {}) => {
+    const token = localStorage.getItem('token');
+    const headers = {
+        'Content-Type': 'application/json',
+        ...options.headers,
+    };
+
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const res = await fetch(`${API_URL}${endpoint}`, {
+        ...options,
+        headers
+    });
+
+    return handleAuthResponse(res);
+};
 
 export const login = async (username, password) => {
     const res = await fetch(`${API_URL}/auth/login`, {
@@ -19,32 +53,10 @@ export const register = async (username, password, email, role = 'user') => {
 };
 
 export const updateProfile = async (profileData) => {
-    const token = localStorage.getItem('token');
-    const res = await fetch(`${API_URL}/auth/update-profile`, {
+    return authFetch('/auth/update-profile', {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
         body: JSON.stringify(profileData)
     });
-
-    const contentType = res.headers.get("content-type");
-    if (contentType && contentType.indexOf("application/json") !== -1) {
-        const data = await res.json();
-        if (!res.ok) {
-            throw new Error(data.message || 'Failed to update profile');
-        }
-        return data;
-    } else {
-        const text = await res.text();
-        console.error("Non-JSON response:", text);
-        // If we get HTML (likely 404 from standard Express/Next handling), it means the route isn't found
-        if (res.status === 404) {
-            throw new Error("Backend endpoint not found. Please RESTART your backend server to apply recent changes.");
-        }
-        throw new Error(`Server error: ${res.status} ${res.statusText}`);
-    }
 };
 
 export const getSweets = async () => {
@@ -53,45 +65,25 @@ export const getSweets = async () => {
 };
 
 export const createOrder = async (items) => {
-    const token = localStorage.getItem('token');
-    const res = await fetch(`${API_URL}/orders`, {
+    return authFetch('/orders', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
         body: JSON.stringify({ items })
     });
-    return res.json();
 };
 
 export const getMyOrders = async () => {
-    const token = localStorage.getItem('token');
-    const res = await fetch(`${API_URL}/orders/myorders`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-    });
-    return res.json();
+    return authFetch('/orders/myorders');
 };
 
 export const getAllOrders = async () => {
-    const token = localStorage.getItem('token');
-    const res = await fetch(`${API_URL}/orders/admin`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-    });
-    return res.json();
+    return authFetch('/orders/admin');
 };
 
 export const updateOrderStatus = async (id, status) => {
-    const token = localStorage.getItem('token');
-    const res = await fetch(`${API_URL}/orders/${id}/status`, {
+    return authFetch(`/orders/${id}/status`, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
         body: JSON.stringify({ status })
     });
-    return res.json();
 };
 
 export const getSweetById = async (id) => {
@@ -105,72 +97,38 @@ export const getReviews = async (id) => {
 };
 
 export const addReview = async (id, rating, comment) => {
-    const token = localStorage.getItem('token');
-    const res = await fetch(`${API_URL}/sweets/${id}/reviews`, {
+    return authFetch(`/sweets/${id}/reviews`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
         body: JSON.stringify({ rating, comment })
     });
-    return res.json();
 };
 
 export const addSweet = async (sweetData) => {
-    const token = localStorage.getItem('token');
-    const res = await fetch(`${API_URL}/sweets`, {
+    return authFetch('/sweets', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
         body: JSON.stringify(sweetData)
     });
-    return res.json();
 };
 
 export const deleteSweet = async (id) => {
-    const token = localStorage.getItem('token');
-    const res = await fetch(`${API_URL}/sweets/${id}`, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
+    return authFetch(`/sweets/${id}`, {
+        method: 'DELETE'
     });
-    return res.json();
 };
 
 export const updateSweet = async (id, sweetData) => {
-    const token = localStorage.getItem('token');
-    const res = await fetch(`${API_URL}/sweets/${id}`, {
+    return authFetch(`/sweets/${id}`, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
         body: JSON.stringify(sweetData)
     });
-    return res.json();
 };
 
 export const getNotifications = async () => {
-    const token = localStorage.getItem('token');
-    const res = await fetch(`${API_URL}/notifications`, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
-    return res.json();
+    return authFetch('/notifications');
 };
 
 export const markNotificationRead = async (id) => {
-    const token = localStorage.getItem('token');
-    const res = await fetch(`${API_URL}/notifications/${id}/read`, {
-        method: 'PUT',
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
+    return authFetch(`/notifications/${id}/read`, {
+        method: 'PUT'
     });
-    return res.json();
 };

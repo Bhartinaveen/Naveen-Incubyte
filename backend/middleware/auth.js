@@ -9,6 +9,9 @@ module.exports = function (req, res, next) {
         req.user = decoded; // Now includes username if we re-login
         next();
     } catch (ex) {
-        res.status(400).json({ message: 'Invalid token.' });
+        if (ex.name === 'TokenExpiredError') {
+            return res.status(401).json({ message: 'Token expired.' });
+        }
+        res.status(401).json({ message: 'Invalid token.' });
     }
 };

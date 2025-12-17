@@ -232,7 +232,7 @@ export default function Analytics() {
 
             <div className={styles.chartsWrapper}>
                 {/* Sales & Profit Bar Chart */}
-                <div className={styles.chartCard} style={{ gridColumn: 'span 2' }}>
+                <div className={`${styles.chartCard} ${styles.fullWidthChart}`}>
                     <h3>Sales & Profit ({filter})</h3>
                     <div style={{ width: '100%', height: 350 }}>
                         <ResponsiveContainer>

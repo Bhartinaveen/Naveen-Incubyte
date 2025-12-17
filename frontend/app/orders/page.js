@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { getMyOrders } from '../../utils/api';
+import Link from 'next/link';
 import styles from './orders.module.css';
 
 export default function MyOrders() {
@@ -20,7 +21,12 @@ export default function MyOrders() {
 
     return (
         <div className={styles.container}>
-            <h1>My Orders</h1>
+            <div className={styles.topHeader}>
+                <h1>My Orders</h1>
+                <Link href="/" className={styles.backBtn}>
+                    ← Back to Shop
+                </Link>
+            </div>
             {orders.length === 0 ? <p>No orders found.</p> : (
                 <div className={styles.list}>
                     {orders.map(order => (

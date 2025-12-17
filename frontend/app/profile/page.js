@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from './profile.module.css';
@@ -14,8 +14,10 @@ export default function Profile() {
         fullName: '',
         email: '',
         mobile: '',
-        address: ''
+        address: '',
+        profileImage: ''
     });
+    const fileInputRef = useRef(null);
     const [message, setMessage] = useState('');
 
     useEffect(() => {
@@ -35,7 +37,10 @@ export default function Profile() {
                     fullName: parsedUser.fullName || '',
                     email: parsedUser.email || '',
                     mobile: parsedUser.mobile || '',
-                    address: parsedUser.address || ''
+                    email: parsedUser.email || '',
+                    mobile: parsedUser.mobile || '',
+                    address: parsedUser.address || '',
+                    profileImage: parsedUser.profileImage || ''
                 });
             } catch (e) {
                 console.error("Failed to parse user data", e);
@@ -46,6 +51,21 @@ export default function Profile() {
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) { // 5MB limit check (backend allows 50MB but good to be sane)
+                alert("Image too large. Please choose an image under 5MB.");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData({ ...formData, profileImage: reader.result }); // Base64
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const handleSave = async (e) => {
@@ -79,9 +99,27 @@ export default function Profile() {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <div className={styles.avatar}>
-                    {user?.username ? user.username[0].toUpperCase() : 'U'}
+                <Link href="/" className={styles.backBtn} aria-label="Back to Home">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                </Link>
+                <div className={styles.avatar} onClick={() => fileInputRef.current.click()} title="Click to upload image">
+                    {formData.profileImage ? (
+                        <img src={formData.profileImage} alt="Profile" className={styles.avatarImage} />
+                    ) : (
+                        user?.username ? user.username[0].toUpperCase() : 'U'
+                    )}
+                    <div className={styles.uploadOverlay}>📷</div>
                 </div>
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleImageChange}
+                    accept="image/*"
+                    hidden
+                />
                 <h1 className={styles.welcome}>{user?.username}</h1>
             </div>
 

@@ -24,10 +24,13 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.sidebar nav {
+.sidebarList {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .sidebar a {
@@ -52,4 +55,37 @@
     flex: 1;
     padding: 2rem;
     background: var(--background-bg);
+}
+
+@media (max-width: 1024px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-height: auto;
+        padding: 1rem;
+    }
+
+    .sidebar h2 {
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .sidebarList {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+    }
+
+    .sidebar a {
+        white-space: nowrap;
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .content {
+        padding: 1rem;
+    }
 }

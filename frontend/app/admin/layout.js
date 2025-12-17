@@ -35,12 +35,12 @@ export default function AdminLayout({ children }) {
         <div className={styles.layout}>
             <aside className={styles.sidebar}>
                 <h2>Admin</h2>
-                <nav>
-                    <Link href="/admin/inventory">Inventory</Link>
-                    <li><a href="/admin/orders" className={styles.link}>Orders</a></li>
-                    <li><a href="/admin/analytics" className={styles.link}>Analytics</a></li>
-                    <li><a href="/" className={styles.link}>Back to Store</a></li>
-                </nav>
+                <ul className={styles.sidebarList}>
+                    <li><Link href="/admin/inventory" className={styles.link}>Inventory</Link></li>
+                    <li><Link href="/admin/orders" className={styles.link}>Orders</Link></li>
+                    <li><Link href="/admin/analytics" className={styles.link}>Analytics</Link></li>
+                    <li><Link href="/" className={styles.link}>Back to Store</Link></li>
+                </ul>
             </aside>
             <main className={styles.content}>
                 {children}

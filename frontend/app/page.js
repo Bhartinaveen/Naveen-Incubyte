@@ -4,6 +4,7 @@ import { getSweets, API_URL, getNotifications, markNotificationRead } from '../u
 import Link from 'next/link';
 import styles from './page.module.css';
 import { useCart } from '../context/CartContext';
+import NotificationBell from '../components/NotificationBell';
 
 export default function Home() {
   const [sweets, setSweets] = useState([]);
@@ -19,7 +20,8 @@ export default function Home() {
 
   // Notification States
   const [notifications, setNotifications] = useState([]);
-  const [showNotifDropdown, setShowNotifDropdown] = useState(false);
+  // showNotifDropdown state moved to component
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
   useEffect(() => {
@@ -101,65 +103,46 @@ export default function Home() {
     <div className={styles.main}>
       <nav className={styles.nav}>
         <div className={styles.logo}>Sweet Shop</div>
-        <div className={styles.links}>
+
+        <div className={styles.mobileIcons}>
+          {/* Notification Bell - Mobile Only */}
+          {token && (
+            <NotificationBell
+              notifications={notifications}
+              unreadCount={unreadCount}
+              onMarkRead={handleMarkRead}
+              className={styles.mobileOnly}
+            />
+          )}
+
+          <button
+            className={styles.hamburger}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div className={`${styles.links} ${isMobileMenuOpen ? styles.active : ''}`}>
+
+          {/* Notification Bell - Desktop Only */}
+          {token && (
+            <NotificationBell
+              notifications={notifications}
+              unreadCount={unreadCount}
+              onMarkRead={handleMarkRead}
+              className={styles.desktopOnly}
+            />
+          )}
+
           <Link href="/cart" className={styles.cartLink}>Cart ({count})</Link>
           <Link href="/orders">Orders</Link>
           {role === 'admin' && <Link href="/admin/inventory" style={{ color: '#d81b60', fontWeight: 'bold' }}>Admin Panel</Link>}
-
-          {/* Notification Bell */}
-          {token && (
-            <div style={{ position: 'relative', display: 'inline-block' }}>
-              <button
-                onClick={() => setShowNotifDropdown(!showNotifDropdown)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', position: 'relative', color: '#333' }}
-              >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                </svg>
-                {unreadCount > 0 && (
-                  <span style={{
-                    position: 'absolute', top: '-5px', right: '-5px',
-                    background: 'red', color: 'white',
-                    borderRadius: '50%', padding: '2px 5px', fontSize: '10px'
-                  }}>
-                    {unreadCount}
-                  </span>
-                )}
-              </button>
-              {showNotifDropdown && (
-                <div className={styles.dropdownMenu} style={{ right: 0, width: '300px', maxHeight: '400px', overflowY: 'auto' }}>
-                  <div className={styles.dropdownHeader}>Notifications</div>
-                  {notifications.length === 0 ? (
-                    <div className={styles.dropdownItem}>No notifications</div>
-                  ) : (
-                    notifications.map(n => (
-                      <div key={n._id} className={styles.dropdownItem} style={{
-                        background: n.isRead ? 'white' : '#f0f9ff',
-                        borderBottom: '1px solid #eee',
-                        padding: '10px',
-                        fontSize: '14px',
-                        display: 'flex', flexDirection: 'column'
-                      }}>
-                        <span style={{ fontWeight: n.isRead ? 'normal' : 'bold' }}>{n.message}</span>
-                        <span style={{ fontSize: '10px', color: '#888', marginTop: '5px' }}>
-                          {new Date(n.createdAt).toLocaleString()}
-                        </span>
-                        {!n.isRead && (
-                          <button
-                            onClick={() => handleMarkRead(n._id)}
-                            style={{ marginTop: '5px', fontSize: '10px', color: 'blue', background: 'none', border: 'none', cursor: 'pointer', alignSelf: 'flex-start' }}
-                          >
-                            Mark as Read
-                          </button>
-                        )}
-                      </div>
-                    ))
-                  )}
-                </div>
-              )}
-            </div>
-          )}
 
           {token ? (
             <div className={styles.profileContainer}>
@@ -256,21 +239,25 @@ export default function Home() {
       <div className={styles.grid}>
         {sweets.map(sweet => (
           <div key={sweet._id} className={styles.card}>
-            <Link href={`/sweets/${sweet._id}`}>
-              <div className={styles.imagePlaceholder} style={{ height: '200px', background: '#eee', borderRadius: '10px 10px 0 0', overflow: 'hidden' }}>
+            <Link href={`/sweets/${sweet._id}`} className={styles.imageLink}>
+              <div className={styles.imageContainer}>
                 <img
                   src={sweet.image || `https://via.placeholder.com/400?text=${encodeURIComponent(sweet.name)}`}
                   alt={sweet.name}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  className={styles.cardImage}
                 />
               </div>
             </Link>
-            <div style={{ padding: '1rem' }}>
-              <h3><Link href={`/sweets/${sweet._id}`}>{sweet.name}</Link></h3>
+            <div className={styles.cardContent}>
+              <h3 className={styles.cardTitle}><Link href={`/sweets/${sweet._id}`}>{sweet.name}</Link></h3>
               <p className={styles.category}>{sweet.category}</p>
-              <p className={styles.price}>₹{sweet.price}</p>
+              <div className={styles.priceRow}>
+                <p className={styles.price}>₹{sweet.price}</p>
+                {sweet.quantity <= 5 && sweet.quantity > 0 && <span className={styles.lowStock}>Only {sweet.quantity} left!</span>}
+              </div>
+
               {sweet.expiryDate && <p className={styles.expiry}>Expires: {new Date(sweet.expiryDate).toLocaleDateString()}</p>}
-              <p className={styles.stock}>Stock: {sweet.quantity}</p>
+
               <button
                 onClick={() => addToCart(sweet)}
                 disabled={sweet.quantity <= 0}
@@ -282,6 +269,6 @@ export default function Home() {
           </div>
         ))}
       </div>
-    </div>
+    </div >
   );
 }

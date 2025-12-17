@@ -35,45 +35,47 @@ export default function AdminOrders() {
     return (
         <div className={styles.container}>
             <h1>Admin: Order Management</h1>
-            <table className={styles.table}>
-                <thead>
-                    <tr>
-                        <th>Order ID</th>
-                        <th>User ID</th>
-                        <th>Mobile</th>
-                        <th>User</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {orders.map(order => (
-                        <tr key={order._id}>
-                            <td>{order._id}</td>
-                            <td>{order.user?._id || 'N/A'}</td>
-                            <td>{order.user?.mobile || 'N/A'}</td>
-                            <td>{order.user?.username || 'Unknown'}</td>
-                            <td>₹{order.totalAmount.toFixed(2)}</td>
-                            <td>
-                                <span className={`${styles.status} ${styles[order.status]}`}>{order.status}</span>
-                            </td>
-                            <td>
-                                <select
-                                    className={styles.select}
-                                    value={order.status}
-                                    onChange={(e) => handleStatusUpdate(order._id, e.target.value)}
-                                >
-                                    <option value="pending">Pending</option>
-                                    <option value="shipped">Shipped</option>
-                                    <option value="delivered">Delivered</option>
-                                    <option value="cancelled">Cancelled</option>
-                                </select>
-                            </td>
+            <div className={styles.tableWrapper}>
+                <table className={styles.table}>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>User ID</th>
+                            <th>Mobile</th>
+                            <th>User</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Action</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {orders.map(order => (
+                            <tr key={order._id}>
+                                <td>{order._id}</td>
+                                <td>{order.user?._id || 'N/A'}</td>
+                                <td>{order.user?.mobile || 'N/A'}</td>
+                                <td>{order.user?.username || 'Unknown'}</td>
+                                <td>₹{order.totalAmount.toFixed(2)}</td>
+                                <td>
+                                    <span className={`${styles.status} ${styles[order.status]}`}>{order.status}</span>
+                                </td>
+                                <td>
+                                    <select
+                                        className={styles.select}
+                                        value={order.status}
+                                        onChange={(e) => handleStatusUpdate(order._id, e.target.value)}
+                                    >
+                                        <option value="pending">Pending</option>
+                                        <option value="shipped">Shipped</option>
+                                        <option value="delivered">Delivered</option>
+                                        <option value="cancelled">Cancelled</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }

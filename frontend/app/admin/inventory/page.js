@@ -120,42 +120,44 @@ export default function Inventory() {
                 </form>
             )}
 
-            <table className={styles.table}>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Category</th>
-                        <th>Price</th>
-                        <th>Stock</th>
-                        <th>Expiry Date</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {sweets.map(sweet => {
-                        const status = checkExpiry(sweet.expiryDate);
-                        return (
-                            <tr key={sweet._id} className={styles[status]}>
-                                <td>{sweet.name}</td>
-                                <td>{sweet.category}</td>
-                                <td>₹{sweet.price}</td>
-                                <td>{sweet.quantity}</td>
-                                <td>{sweet.expiryDate ? new Date(sweet.expiryDate).toLocaleDateString() : 'N/A'}</td>
-                                <td>
-                                    {status === 'expired' && <span className={styles.badgeExpired}>Expired</span>}
-                                    {status === 'warning' && <span className={styles.badgeWarning}>Expiring Soon</span>}
-                                    {status === 'safe' && <span className={styles.badgeSafe}>Ok</span>}
-                                </td>
-                                <td>
-                                    <button className={styles.editBtn} onClick={() => handleEdit(sweet)} style={{ marginRight: '0.5rem', background: '#e0f2fe', color: '#0ea5e9', padding: '0.4rem 0.8rem', borderRadius: '6px', fontWeight: '600' }}>Edit</button>
-                                    <button className={styles.deleteBtn} onClick={() => handleDelete(sweet._id)}>Delete</button>
-                                </td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
+            <div className={styles.tableWrapper}>
+                <table className={styles.table}>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Expiry Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {sweets.map(sweet => {
+                            const status = checkExpiry(sweet.expiryDate);
+                            return (
+                                <tr key={sweet._id} className={styles[status]}>
+                                    <td>{sweet.name}</td>
+                                    <td>{sweet.category}</td>
+                                    <td>₹{sweet.price}</td>
+                                    <td>{sweet.quantity}</td>
+                                    <td>{sweet.expiryDate ? new Date(sweet.expiryDate).toLocaleDateString() : 'N/A'}</td>
+                                    <td>
+                                        {status === 'expired' && <span className={styles.badgeExpired}>Expired</span>}
+                                        {status === 'warning' && <span className={styles.badgeWarning}>Expiring Soon</span>}
+                                        {status === 'safe' && <span className={styles.badgeSafe}>Ok</span>}
+                                    </td>
+                                    <td>
+                                        <button className={styles.editBtn} onClick={() => handleEdit(sweet)} style={{ marginRight: '0.5rem', background: '#e0f2fe', color: '#0ea5e9', padding: '0.4rem 0.8rem', borderRadius: '6px', fontWeight: '600' }}>Edit</button>
+                                        <button className={styles.deleteBtn} onClick={() => handleDelete(sweet._id)}>Delete</button>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { getSweetById, getReviews, addReview } from '../../../utils/api';
 import { useCart } from '../../../context/CartContext';
+import Link from 'next/link';
 import styles from './details.module.css';
 
 export default function SweetDetails() {
@@ -46,6 +47,12 @@ export default function SweetDetails() {
 
     return (
         <div className={styles.container}>
+            <Link href="/" className={styles.backBtn} aria-label="Back to Home">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </Link>
             <div className={styles.product}>
                 <div className={styles.imageWrapper}>
                     {/* Placeholder image logic */}

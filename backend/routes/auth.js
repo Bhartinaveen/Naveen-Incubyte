@@ -54,7 +54,8 @@ router.post('/login', async (req, res) => {
             role: user.role,
             fullName: user.fullName,
             mobile: user.mobile,
-            address: user.address
+            address: user.address,
+            profileImage: user.profileImage || ''
         };
 
         res.json({ token, role: user.role, user: userData });
@@ -74,6 +75,7 @@ router.put('/update-profile', auth, async (req, res) => {
         if (email) updateFields.email = email;
         if (mobile) updateFields.mobile = mobile;
         if (address) updateFields.address = address;
+        if (req.body.profileImage !== undefined) updateFields.profileImage = req.body.profileImage;
 
         // Check if email is being changed and if it lives
         if (email) {
