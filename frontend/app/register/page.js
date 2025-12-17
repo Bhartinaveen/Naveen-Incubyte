@@ -21,7 +21,8 @@ export default function Register() {
                 alert(data.message || 'Registration failed');
             }
         } catch (err) {
-            alert('Something went wrong');
+            alert(err.message || 'Something went wrong');
+            console.error(err);
         }
     };
 

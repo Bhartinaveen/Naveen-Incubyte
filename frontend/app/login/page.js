@@ -25,7 +25,8 @@ export default function Login() {
                 alert(data.message || 'Login failed');
             }
         } catch (err) {
-            alert('Something went wrong');
+            alert(err.message || 'Something went wrong');
+            console.error(err);
         }
     };
 
