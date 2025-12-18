@@ -1,4 +1,4 @@
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://naveen-incubyte.vercel.app/api';
 
 // Helper to handle responses, specifically 401 Unauthorized
 const handleAuthResponse = async (res) => {
