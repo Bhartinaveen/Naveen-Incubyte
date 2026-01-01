@@ -114,12 +114,129 @@
     color: #b91c1c;
 }
 
-.item {
+
+/* Item Row Layout */
+.itemRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    border-left: 3px solid var(--primary-light);
+    margin-bottom: 0.5rem;
+    background: #f9fafb;
+}
+
+.itemInfo {
     font-size: 0.95rem;
     color: var(--text-secondary);
-    margin-bottom: 0.4rem;
-    padding-left: 0.5rem;
-    border-left: 3px solid var(--primary-light);
+}
+
+.rateBtn {
+    background: #fbbf24;
+    color: #92400e;
+    border: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.rateBtn:hover {
+    background: #f59e0b;
+}
+
+/* Review Modal */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 400px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s ease-out;
+    text-align: center;
+}
+
+.starRating {
+    font-size: 2.5rem;
+    margin: 1rem 0;
+    cursor: pointer;
+}
+
+.starFilled {
+    color: #fbbf24;
+    /* Golden */
+}
+
+.starEmpty {
+    color: #e5e7eb;
+}
+
+.commentInput {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 100px;
+    margin-bottom: 1rem;
+}
+
+.modalActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.cancelBtn {
+    background: transparent;
+    border: 1px solid #ddd;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.submitBtn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.message {
+    color: green;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .footer {
@@ -137,4 +254,41 @@
     color: var(--text-primary);
     font-weight: 800;
     font-size: 1.2rem;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    gap: 1rem;
+}
+
+.pageBtn {
+    padding: 0.6rem 1.2rem;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--text-primary);
+    transition: all 0.2s;
+}
+
+.pageBtn:hover:not(:disabled) {
+    background: var(--text-primary);
+    color: white;
+    border-color: var(--text-primary);
+}
+
+.pageBtn:disabled {
+    background: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.pageInfo {
+    font-weight: 600;
+    color: var(--text-secondary);
 }

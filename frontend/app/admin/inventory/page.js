@@ -8,7 +8,7 @@ export default function Inventory() {
     const [showAddForm, setShowAddForm] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [formData, setFormData] = useState({
-        name: '', category: '', price: '', costPrice: '', quantity: '',
+        name: '', category: '', price: '', costPrice: '', originalPrice: '', quantity: '',
         description: '', image: '', expiryDate: '', batchNumber: ''
     });
 
@@ -37,6 +37,7 @@ export default function Inventory() {
             category: sweet.category,
             price: sweet.price,
             costPrice: sweet.costPrice || '',
+            originalPrice: sweet.originalPrice || '',
             quantity: sweet.quantity,
             description: sweet.description || '',
             image: sweet.image || '',
@@ -62,7 +63,7 @@ export default function Inventory() {
             setShowAddForm(false);
             setEditingId(null);
             setFormData({
-                name: '', category: '', price: '', costPrice: '', quantity: '',
+                name: '', category: '', price: '', costPrice: '', originalPrice: '', quantity: '',
                 description: '', image: '', expiryDate: '', batchNumber: ''
             });
             fetchData();
@@ -83,6 +84,18 @@ export default function Inventory() {
         return 'safe';
     };
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
+    // Pagination Logic
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentSweets = sweets.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(sweets.length / itemsPerPage);
+
+    const nextPage = () => setCurrentPage(prev => Math.min(prev + 1, totalPages));
+    const prevPage = () => setCurrentPage(prev => Math.max(prev - 1, 1));
+
     return (
         <div className={styles.container}>
             <div className={styles.header}>
@@ -91,7 +104,7 @@ export default function Inventory() {
                     setShowAddForm(!showAddForm);
                     setEditingId(null);
                     setFormData({
-                        name: '', category: '', price: '', costPrice: '', quantity: '',
+                        name: '', category: '', price: '', costPrice: '', originalPrice: '', quantity: '',
                         description: '', image: '', expiryDate: '', batchNumber: ''
                     });
                 }}>
@@ -104,7 +117,18 @@ export default function Inventory() {
                     <h2>{editingId ? 'Edit Product' : 'Add New Product'}</h2>
                     <div className={styles.formGrid}>
                         <input placeholder="Name" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
-                        <input placeholder="Category" value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} required />
+                        <select
+                            value={formData.category}
+                            onChange={e => setFormData({ ...formData, category: e.target.value })}
+                            required
+                            style={{ padding: '0.8rem', borderRadius: '4px', border: '1px solid #ccc' }}
+                        >
+                            <option value="" disabled>Select Category</option>
+                            {['Chocolate', 'Gummy', 'Hard Candy', 'Bakery', 'Classic', 'Dried Fruits', 'Gifting', 'Sugar Free'].map(cat => (
+                                <option key={cat} value={cat}>{cat}</option>
+                            ))}
+                        </select>
+                        <input type="number" placeholder="MRP / Original Price (₹)" value={formData.originalPrice} onChange={e => setFormData({ ...formData, originalPrice: e.target.value })} />
                         <input type="number" placeholder="Sale Price (₹)" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} required />
                         <input type="number" placeholder="Cost Price (₹)" value={formData.costPrice} onChange={e => setFormData({ ...formData, costPrice: e.target.value })} required />
                         <input type="number" placeholder="Quantity" value={formData.quantity} onChange={e => setFormData({ ...formData, quantity: e.target.value })} required />
@@ -134,7 +158,7 @@ export default function Inventory() {
                         </tr>
                     </thead>
                     <tbody>
-                        {sweets.map(sweet => {
+                        {currentSweets.map(sweet => {
                             const status = checkExpiry(sweet.expiryDate);
                             return (
                                 <tr key={sweet._id} className={styles[status]}>
@@ -157,6 +181,19 @@ export default function Inventory() {
                         })}
                     </tbody>
                 </table>
+            </div>
+
+            {/* Pagination Controls */}
+            <div className={styles.pagination}>
+                <button onClick={prevPage} disabled={currentPage === 1} className={styles.pageBtn}>
+                    Previous
+                </button>
+                <span className={styles.pageInfo}>
+                    Page {currentPage} of {totalPages > 0 ? totalPages : 1}
+                </span>
+                <button onClick={nextPage} disabled={currentPage >= totalPages} className={styles.pageBtn}>
+                    Next
+                </button>
             </div>
         </div>
     );

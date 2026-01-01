@@ -7,8 +7,8 @@ const auth = require('../middleware/auth');
 // Add new sweet (Protected)
 router.post('/', auth, async (req, res) => {
     try {
-        const { name, category, price, costPrice, quantity, description, image, expiryDate, batchNumber } = req.body;
-        const newSweet = new Sweet({ name, category, price, costPrice, quantity, description, image, expiryDate, batchNumber });
+        const { name, category, price, costPrice, originalPrice, quantity, description, image, expiryDate, batchNumber } = req.body;
+        const newSweet = new Sweet({ name, category, price, costPrice, originalPrice, quantity, description, image, expiryDate, batchNumber });
         await newSweet.save();
         res.status(201).json(newSweet);
     } catch (err) {
@@ -88,14 +88,38 @@ router.post('/:id/reviews', auth, async (req, res) => {
         const review = new Review({
             sweet: sweet._id,
             user: req.user.id,
-            username: req.user.username || 'Anonymous', // In a real app we'd populate user to get name, or store it in token
+            username: req.user.username || 'Anonymous',
             rating,
             comment
         });
 
         await review.save();
-        res.status(201).json(review);
+
+        // Recalculate Average Logic
+        const stats = await Review.aggregate([
+            { $match: { sweet: sweet._id } },
+            {
+                $group: {
+                    _id: '$sweet',
+                    avgRating: { $avg: '$rating' },
+                    count: { $sum: 1 }
+                }
+            }
+        ]);
+
+        if (stats.length > 0) {
+            sweet.averageRating = Math.round(stats[0].avgRating * 10) / 10; // Round to 1 decimal
+            sweet.reviewCount = stats[0].count;
+        } else {
+            sweet.averageRating = rating;
+            sweet.reviewCount = 1;
+        }
+
+        await sweet.save();
+
+        res.status(201).json({ review, sweet });
     } catch (err) {
+        console.error(err);
         res.status(500).json({ message: 'Server error', error: err.message });
     }
 });

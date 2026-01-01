@@ -42,6 +42,7 @@ export default function AdminLayout({ children }) {
                         <li><Link href="/admin/users" className={styles.link}>Users</Link></li>
                     )}
                     <li><Link href="/admin/analytics" className={styles.link}>Analytics</Link></li>
+                    <li><Link href="/admin/delivery-partners" className={styles.link}>Delivery Partners</Link></li>
                     <li><Link href="/" className={styles.link}>Back to Store</Link></li>
                 </ul>
             </aside>

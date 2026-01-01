@@ -88,11 +88,16 @@ router.get('/admin', auth, async (req, res) => {
 router.put('/:id/status', auth, async (req, res) => {
     try {
         if (!['admin', 'superadmin'].includes(req.user.role)) return res.status(403).json({ message: 'Admin access required' });
-        const { status } = req.body;
+        const { status, deliveryPartnerId } = req.body;
+
+        const updateData = { status };
+        if (deliveryPartnerId) {
+            updateData.deliveryPartner = deliveryPartnerId;
+        }
 
         const order = await Order.findByIdAndUpdate(
             req.params.id,
-            { status },
+            updateData,
             { new: true }
         );
 

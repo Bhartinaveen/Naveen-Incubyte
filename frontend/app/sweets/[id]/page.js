@@ -63,8 +63,14 @@ export default function SweetDetails() {
                     />
                 </div>
                 <div className={styles.info}>
-                    <h1>{sweet.name}</h1>
+                    <h1 className={styles.title}>{sweet.name}</h1>
                     <p className={styles.category}>{sweet.category}</p>
+                    <div className={styles.ratingSummary}>
+                        {Array.from({ length: 5 }).map((_, i) => (
+                            <span key={i} className={i < Math.round(sweet.averageRating || 0) ? styles.starFilled : styles.starEmpty}>★</span>
+                        ))}
+                        <span className={styles.reviewCount}>({sweet.reviewCount || 0} reviews)</span>
+                    </div>
                     <p className={styles.price}>₹{sweet.price}</p>
                     <p className={styles.description}>{sweet.description || 'No description available.'}</p>
                     <p className={styles.stock}>Stock: {sweet.quantity}</p>

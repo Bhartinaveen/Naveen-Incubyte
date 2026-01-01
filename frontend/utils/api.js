@@ -79,10 +79,16 @@ export const getAllOrders = async () => {
     return authFetch('/orders/admin');
 };
 
-export const updateOrderStatus = async (id, status) => {
+export const updateOrderStatus = async (id, status, deliveryPartnerId = null) => {
     return authFetch(`/orders/${id}/status`, {
         method: 'PUT',
-        body: JSON.stringify({ status })
+        body: JSON.stringify({ status, deliveryPartnerId })
+    });
+};
+
+export const acceptOrder = async (orderId) => {
+    return authFetch(`/delivery-partners/accept-order/${orderId}`, {
+        method: 'PUT'
     });
 };
 
@@ -142,4 +148,34 @@ export const updateUserRole = async (userId, role) => {
         method: 'PUT',
         body: JSON.stringify({ role })
     });
+};
+
+export const addDeliveryPartner = async (name, mobile) => {
+    return authFetch('/delivery-partners/admin/add', {
+        method: 'POST',
+        body: JSON.stringify({ name, mobile })
+    });
+};
+
+export const getDeliveryPartners = async () => {
+    return authFetch('/delivery-partners/admin/all');
+};
+
+export const terminateDeliveryPartner = async (id) => {
+    return authFetch(`/delivery-partners/admin/terminate/${id}`, {
+        method: 'PUT'
+    });
+};
+
+export const loginDeliveryPartner = async (name, uniqueId) => {
+    const res = await fetch(`${API_URL}/delivery-partners/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, uniqueId })
+    });
+    return res.json();
+};
+
+export const getDeliveryPartnerMe = async () => {
+    return authFetch('/delivery-partners/me');
 };
