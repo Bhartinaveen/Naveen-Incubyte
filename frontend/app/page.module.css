@@ -309,11 +309,11 @@
 /* Grid */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: 2rem;
   padding: 2rem;
-  width: 90%;
-  max-width: 1800px;
+  width: 95%;
+  max-width: 1900px;
   margin: 2rem auto;
 }
 
