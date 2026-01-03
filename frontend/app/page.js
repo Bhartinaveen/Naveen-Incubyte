@@ -374,13 +374,18 @@ export default function Home() {
             {sweets.filter(s => s.category === 'Bestseller' && s.quantity > 0).length > 0 ? (
               sweets.filter(s => s.category === 'Bestseller' && s.quantity > 0).map((sweet) => (
                 <div key={sweet._id} className={styles.bestsellerCard}>
-                  <div className={styles.imageLink} style={{ height: '260px' }}>
-                    <div className={styles.bestsellerBadge}>Bestseller</div>
-                    {sweet.originalPrice > sweet.price && (
-                      <span className={styles.discountBadge}>
-                        {Math.round(((sweet.originalPrice - sweet.price) / sweet.originalPrice) * 100)}% OFF
-                      </span>
-                    )}
+                  <div className={styles.bestsellerBadge}>Bestseller</div>
+                  {sweet.originalPrice > sweet.price && (
+                    <div className={styles.discountBadge}>
+                      {Math.round(((sweet.originalPrice - sweet.price) / sweet.originalPrice) * 100)}% OFF
+                    </div>
+                  )}
+                  {/* Image Container with Navigation */}
+                  <div
+                    className={styles.imageLink}
+                    style={{ height: '260px', cursor: 'pointer' }}
+                    onClick={() => router.push(`/sweets/${sweet._id}`)}
+                  >
                     <img
                       src={sweet.image || 'https://via.placeholder.com/300'}
                       alt={sweet.name}

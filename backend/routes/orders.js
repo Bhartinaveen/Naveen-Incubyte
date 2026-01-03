@@ -115,4 +115,15 @@ router.put('/:id/status', auth, async (req, res) => {
     }
 });
 
+// Reset/Clear All Orders (Admin - for testing)
+router.delete('/reset', auth, async (req, res) => {
+    try {
+        if (!['admin', 'superadmin'].includes(req.user.role)) return res.status(403).json({ message: 'Admin access required' });
+        await Order.deleteMany({});
+        res.json({ message: 'All orders have been reset successfully' });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error', error: err.message });
+    }
+});
+
 module.exports = router;

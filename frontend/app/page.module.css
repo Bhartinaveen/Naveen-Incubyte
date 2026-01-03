@@ -7,7 +7,7 @@
 .nav {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 9999;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -108,8 +108,8 @@
   text-align: center;
   padding: 8rem 1rem 10rem;
   background:
-    linear-gradient(to bottom, rgba(255, 240, 245, 0.7) 0%, rgba(224, 242, 254, 0.7) 100%),
-    url('https://images.unsplash.com/photo-1548848221-0c2e497ed557?q=80&w=2000&auto=format&fit=crop') center/cover;
+    linear-gradient(to bottom, rgba(255, 240, 245, 0.2) 0%, rgba(224, 242, 254, 0.2) 100%),
+    url('https://images.unsplash.com/photo-1579372786545-d24232daf58c?q=80&w=2000&auto=format&fit=crop') center/cover;
   margin-bottom: -5rem;
   clip-path: ellipse(180% 100% at 50% 0%);
   position: relative;
@@ -163,21 +163,28 @@
 
 .heroSubtitle {
   font-size: 1.8rem;
-  font-weight: 600;
-  color: #ec4899;
+  font-weight: 700;
+  color: #be185d;
   margin-bottom: 1.5rem;
   position: relative;
   z-index: 1;
   letter-spacing: 0.02em;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
 }
 
 .heroDescription {
-  font-size: 1.2rem;
-  color: #4b5563;
+  font-size: 1.25rem;
+  color: #111827;
   max-width: 700px;
   margin: 0 auto;
   line-height: 1.8;
   position: relative;
+  z-index: 1;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(4px);
+  padding: 1rem 2rem;
+  border-radius: 12px;
   z-index: 1;
   font-weight: 400;
 }
@@ -309,18 +316,18 @@
 /* Grid */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
   padding: 2rem;
-  width: 95%;
-  max-width: 1900px;
+  width: 90%;
+  max-width: 1400px;
   margin: 2rem auto;
 }
 
 .card {
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(12px);
-  border-radius: 24px;
+  border-radius: 20px;
   padding: 0;
   border: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
@@ -333,14 +340,14 @@
 }
 
 .card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-5px);
   background: white;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(139, 92, 246, 0.1);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(139, 92, 246, 0.1);
   border-color: transparent;
 }
 
 .imageLink {
-  height: 250px;
+  height: 140px;
   width: 100%;
   margin: 0;
   /* Reset margins */
@@ -371,37 +378,37 @@
 }
 
 .cardContent {
-  padding: 1.5rem;
+  padding: 0.8rem;
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 0.8rem;
+  gap: 0.4rem;
 }
 
 .cardTitle {
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 700;
   color: #111827;
-  line-height: 1.4;
-  margin-bottom: 0.2rem;
+  line-height: 1.2;
+  margin-bottom: 0px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  height: 3.5rem;
+  height: 2.4rem;
   /* Fixed height for consistency */
 }
 
 .category {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: #8b5cf6;
   background: #f3f4f6;
-  padding: 0.3rem 0.8rem;
-  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
   align-self: flex-start;
   display: inline-block;
 }
@@ -410,13 +417,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1rem;
-  padding-top: 1rem;
+  margin-top: 0.3rem;
+  padding-top: 0.3rem;
   border-top: 1px dashed rgba(0, 0, 0, 0.1);
 }
 
 .price {
-  font-size: 1.8rem;
+  font-size: 1.2rem;
   font-weight: 900;
   background: linear-gradient(135deg, #111827 0%, #4b5563 100%);
   background-clip: text;
@@ -425,9 +432,9 @@
 }
 
 .buyBtn {
-  margin-top: 1.5rem;
+  margin-top: 0.8rem;
   width: 100%;
-  padding: 1.2rem;
+  padding: 0.6rem;
   background: #111827;
   color: white;
   font-weight: 700;
@@ -695,8 +702,8 @@
 
 /* Bestseller Responsive Card */
 .bestsellerCard {
-  min-width: 420px;
-  max-width: 420px;
+  min-width: 350px;
+  max-width: 350px;
   background-color: #FCF5EE;
   border-radius: 24px;
   padding: 0;
