@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { login } from '../../utils/api';
 import styles from './login.module.css';
 
@@ -49,6 +50,10 @@ export default function Login() {
                     required
                 />
                 <button type="submit">Login</button>
+                <div className={styles.registerLink}>
+                    Don't have an account?
+                    <Link href="/register">Register Now</Link>
+                </div>
             </form>
         </div>
     );

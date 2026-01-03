@@ -79,6 +79,19 @@ mongoose.connect(MONGODB_URI, {
             }
         ]);
 
+        const Category = require('./models/Category');
+        await Category.deleteMany({});
+        await Category.insertMany([
+            { name: 'Chocolate', image: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?q=80&w=1000&auto=format&fit=crop' },
+            { name: 'Gummy', image: 'https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?q=80&w=1000&auto=format&fit=crop' },
+            { name: 'Hard Candy', image: 'https://images.unsplash.com/photo-1575224300306-1b8da36134ec?q=80&w=1000&auto=format&fit=crop' },
+            { name: 'Bakery', image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=1000&auto=format&fit=crop' },
+            { name: 'Classic', image: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?q=80&w=1000&auto=format&fit=crop' },
+            { name: 'Dried Fruits', image: 'https://images.unsplash.com/photo-1608755728617-aefab37d2edd?q=80&w=1000&auto=format&fit=crop' },
+            { name: 'Gifting', image: 'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=1000&auto=format&fit=crop' },
+            { name: 'Sugar Free', image: 'https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?q=80&w=1000&auto=format&fit=crop' }
+        ]);
+
         console.log('Data Seeded');
         process.exit();
     })

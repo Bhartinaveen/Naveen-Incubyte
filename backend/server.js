@@ -22,15 +22,17 @@ mongoose.connect(MONGODB_URI)
 const authRoutes = require('./routes/auth');
 const sweetRoutes = require('./routes/sweets');
 const orderRoutes = require('./routes/orders');
-const deliveryPartnerRoutes = require('./routes/deliveryPartners');
-
-const notificationRoutes = require('./routes/notifications');
 const userRoutes = require('./routes/users');
+const deliveryPartnerRoutes = require('./routes/deliveryPartners');
+const categoryRoutes = require('./routes/categories');
+const notificationRoutes = require('./routes/notifications');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/sweets', sweetRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/delivery-partners', deliveryPartnerRoutes);
+app.use('/api/categories', categoryRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/users', userRoutes);
 

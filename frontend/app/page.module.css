@@ -310,9 +310,10 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 3rem;
+  gap: 2rem;
   padding: 2rem;
-  max-width: 1400px;
+  width: 90%;
+  max-width: 1800px;
   margin: 2rem auto;
 }
 
@@ -418,6 +419,7 @@
   font-size: 1.8rem;
   font-weight: 900;
   background: linear-gradient(135deg, #111827 0%, #4b5563 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -607,6 +609,36 @@
   /* Gold accent on hover */
 }
 
+.bestsellerBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #fbbf24;
+  color: #000;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  z-index: 10;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.discountBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #ef4444;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  z-index: 10;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 @media (max-width: 768px) {
   .rangeGrid {
     gap: 1rem;
@@ -614,6 +646,81 @@
 
   .rangeCard {
     min-width: 200px;
+  }
+
+  .rangeCard:hover {
+    transform: none;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .rangeCard:hover .rangeImage {
+    transform: none;
+  }
+
+  .rangeCard:hover .rangeCategoryName,
+  .rangeCard:hover .rangeProductCount {
+    transform: none;
+  }
+
+  .hero {
+    padding: 6rem 1rem 8rem;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+  }
+
+  .rangeTitle {
+    font-size: 2rem;
+    padding-left: 1rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .links {
+    display: none;
+    /* Consider a hamburger menu for full implementation later */
+  }
+}
+
+/* Bestseller Responsive Card */
+.bestsellerCard {
+  min-width: 420px;
+  max-width: 420px;
+  background-color: #FCF5EE;
+  border-radius: 24px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  scroll-snap-align: center;
+}
+
+@media (max-width: 768px) {
+  .bestsellerCard {
+    min-width: 320px;
+    max-width: 320px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bestsellerCard {
+    min-width: 280px;
+    max-width: 280px;
   }
 }
 

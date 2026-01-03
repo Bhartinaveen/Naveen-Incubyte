@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { getSweets, API_URL, getNotifications, markNotificationRead, loginDeliveryPartner } from '../utils/api';
+import { getSweets, API_URL, getNotifications, markNotificationRead, loginDeliveryPartner, getCategories } from '../utils/api';
 import Link from 'next/link';
 import styles from './page.module.css';
 import { useCart } from '../context/CartContext';
@@ -10,35 +10,10 @@ import NotificationBell from '../components/NotificationBell';
 export default function Home() {
   const router = useRouter();
   const [sweets, setSweets] = useState([]);
+  const [categories, setCategories] = useState([]);
 
-  // Slider State
+  // Slider State - Auto slide removed as per request
   const sliderRef = useRef(null);
-  const [isPaused, setIsPaused] = useState(false);
-
-  useEffect(() => {
-    const slider = sliderRef.current;
-    if (!slider) return;
-
-    let animationFrameId;
-    const scrollSpeed = 0.8; // Slightly faster for visibility
-
-    const animate = () => {
-      // Logic: If not paused, scroll. 
-      // Note: We check if slice is at the end of the first set
-      if (!isPaused) {
-        if (slider.scrollLeft >= (slider.scrollWidth / 2)) {
-          // Reset to 0 for infinite loop
-          slider.scrollLeft = 0;
-        } else {
-          slider.scrollLeft += scrollSpeed;
-        }
-      }
-      animationFrameId = requestAnimationFrame(animate);
-    };
-
-    animationFrameId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [isPaused]);
 
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
@@ -64,6 +39,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchSweets();
+    fetchCategories();
     const storedRole = localStorage.getItem('role');
     const storedToken = localStorage.getItem('token');
     const storedUser = localStorage.getItem('user');
@@ -77,6 +53,20 @@ export default function Home() {
       }
     }
   }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const data = await getCategories();
+      if (Array.isArray(data)) {
+        // Double the list for better scroll experience if items are few, or just use as is. 
+        // For now, let's just use the data. If user adds many, it scrolls.
+        // To mimic the previous "infinite" look, we could duplicate if length < 8
+        setCategories(data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch categories", err);
+    }
+  };
 
   // Poll for notifications
   useEffect(() => {
@@ -180,7 +170,7 @@ export default function Home() {
 
           <Link href="/cart" className={styles.cartLink}>Cart ({count})</Link>
           <Link href="/orders">Orders</Link>
-          {['admin', 'superadmin'].includes(role) && <Link href="/admin/inventory" style={{ color: '#d81b60', fontWeight: 'bold' }}>Admin Panel</Link>}
+          {token && ['admin', 'superadmin'].includes(role) && <Link href="/admin/inventory" style={{ color: '#d81b60', fontWeight: 'bold' }}>Admin Panel</Link>}
 
           {token ? (
             <div className={styles.profileContainer}>
@@ -299,53 +289,37 @@ export default function Home() {
           <div
             className={styles.sliderTrack}
             ref={sliderRef}
-            onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => setIsPaused(false)}
-            onTouchStart={() => setIsPaused(true)}
-            onTouchEnd={() => setTimeout(() => setIsPaused(false), 2000)}
           >
-            {[
-              { name: 'Chocolate', img: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?q=80&w=1000&auto=format&fit=crop' },
-              { name: 'Gummy', img: 'https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?q=80&w=1000&auto=format&fit=crop' },
-              { name: 'Hard Candy', img: 'https://images.unsplash.com/photo-1575224300306-1b8da36134ec?q=80&w=1000&auto=format&fit=crop' },
-              { name: 'Bakery', img: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=1000&auto=format&fit=crop' },
-              { name: 'Classic', img: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?q=80&w=1000&auto=format&fit=crop' },
-              { name: 'Dried Fruits', img: 'https://images.unsplash.com/photo-1608755728617-aefab37d2edd?q=80&w=1000&auto=format&fit=crop' },
-              { name: 'Gifting', img: 'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=1000&auto=format&fit=crop' },
-              { name: 'Sugar Free', img: 'https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?q=80&w=1000&auto=format&fit=crop' },
-              // Duplicate list for infinite scroll loop
-              { name: 'Chocolate', img: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?q=80&w=1000&auto=format&fit=crop' },
-              { name: 'Gummy', img: 'https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?q=80&w=1000&auto=format&fit=crop' },
-              { name: 'Hard Candy', img: 'https://images.unsplash.com/photo-1575224300306-1b8da36134ec?q=80&w=1000&auto=format&fit=crop' },
-              { name: 'Bakery', img: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=1000&auto=format&fit=crop' },
-              { name: 'Classic', img: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?q=80&w=1000&auto=format&fit=crop' },
-              { name: 'Dried Fruits', img: 'https://images.unsplash.com/photo-1608755728617-aefab37d2edd?q=80&w=1000&auto=format&fit=crop' },
-              { name: 'Gifting', img: 'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=1000&auto=format&fit=crop' },
-              { name: 'Sugar Free', img: 'https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?q=80&w=1000&auto=format&fit=crop' }
-            ].map((cat, index) => (
-              <div
-                key={`${cat.name.trim()}-${index}`}
-                className={styles.rangeCard}
-                onClick={() => {
-                  const cleanName = cat.name.trim();
-                  // Navigate to dedicated category page
-                  router.push(`/category/${encodeURIComponent(cleanName)}`);
-                }}
-              >
-                <div className={styles.rangeImageContainer}>
-                  <img src={cat.img} alt={cat.name} className={styles.rangeImage} />
+            {categories.length > 0 ? (
+              categories.map((cat, index) => (
+                <div
+                  key={`${cat.name.trim()}-${index}`}
+                  className={styles.rangeCard}
+                  onClick={() => {
+                    const cleanName = cat.name.trim();
+                    // Navigate to dedicated category page
+                    router.push(`/category/${encodeURIComponent(cleanName)}`);
+                  }}
+                >
+                  <div className={styles.rangeImageContainer}>
+                    <img src={cat.image} alt={cat.name} className={styles.rangeImage} />
+                  </div>
+                  <h3 className={styles.rangeCategoryName}>{cat.name.trim()}</h3>
+                  <p className={styles.rangeProductCount}>
+                    {sweets.filter(s => s.category === cat.name.trim()).length > 0
+                      ? `${sweets.filter(s => s.category === cat.name.trim()).length} Products`
+                      : 'Explore Collection'}
+                  </p>
                 </div>
-                <h3 className={styles.rangeCategoryName}>{cat.name.trim()}</h3>
-                <p className={styles.rangeProductCount}>
-                  {sweets.filter(s => s.category === cat.name.trim()).length > 0
-                    ? `${sweets.filter(s => s.category === cat.name.trim()).length} Products`
-                    : 'Explore Collection'}
-                </p>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p style={{ textAlign: 'center', width: '100%', color: '#666' }}>Loading categories...</p>
+            )}
           </div>
         </div>
       </div>
+
+
 
       {/* Product Grid Removed as per user request to move listings to category pages */}
 
@@ -373,6 +347,91 @@ export default function Home() {
 
         <div className={styles.festiveImageSection}>
           <img src="https://images.unsplash.com/photo-1548848221-0c2e497ed557?q=80&w=1000&auto=format&fit=crop" alt="Festive Sweets Right" className={styles.festiveImg} />
+        </div>
+      </div>
+
+      {/* Bestseller Section */}
+      <div className={styles.shopRangeSection} style={{ marginBottom: '0', backgroundColor: '#F9F8F6', padding: '2rem 0', position: 'relative' }}>
+        <h2 className={styles.rangeTitle}>Bestseller Products</h2>
+
+        <div className={styles.sliderWindow} style={{ padding: '0 3rem' }}>
+          <button
+            onClick={() => {
+              const container = document.getElementById('bestseller-slider');
+              if (container) container.scrollBy({ left: -320, behavior: 'smooth' });
+            }}
+            style={{
+              position: 'absolute', left: '10px', top: '55%', transform: 'translateY(-50%)',
+              zIndex: 20, background: 'rgba(255,255,255,0.8)', border: 'none', borderRadius: '50%',
+              width: '40px', height: '40px', cursor: 'pointer', boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem'
+            }}
+          >
+            &#8592;
+          </button>
+
+          <div id="bestseller-slider" className={styles.sliderTrack} style={{ gap: '3rem', paddingBottom: '1rem' }}>
+            {sweets.filter(s => s.category === 'Bestseller' && s.quantity > 0).length > 0 ? (
+              sweets.filter(s => s.category === 'Bestseller' && s.quantity > 0).map((sweet) => (
+                <div key={sweet._id} className={styles.bestsellerCard}>
+                  <div className={styles.imageLink} style={{ height: '260px' }}>
+                    <div className={styles.bestsellerBadge}>Bestseller</div>
+                    {sweet.originalPrice > sweet.price && (
+                      <span className={styles.discountBadge}>
+                        {Math.round(((sweet.originalPrice - sweet.price) / sweet.originalPrice) * 100)}% OFF
+                      </span>
+                    )}
+                    <img
+                      src={sweet.image || 'https://via.placeholder.com/300'}
+                      alt={sweet.name}
+                      className={styles.cardImage}
+                    />
+                  </div>
+                  <div className={styles.cardContent}>
+                    <h3 className={styles.cardTitle}>{sweet.name}</h3>
+
+                    <div className={styles.ratingRow} style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '5px' }}>
+                      <span style={{ color: '#fbbf24', fontSize: '1rem' }}>★</span>
+                      <span style={{ fontWeight: '600', fontSize: '0.9rem' }}>{sweet.averageRating || 4.5}</span>
+                      <span style={{ color: '#9ca3af', fontSize: '0.8rem' }}>({sweet.reviewCount || 120})</span>
+                    </div>
+
+                    <div className={styles.priceRow}>
+                      <span className={styles.price}>₹{sweet.price}</span>
+                      {sweet.originalPrice > sweet.price && (
+                        <span style={{ textDecoration: 'line-through', color: '#9ca3af', fontSize: '0.9rem', marginLeft: '8px' }}>
+                          ₹{sweet.originalPrice}
+                        </span>
+                      )}
+                    </div>
+                    <button
+                      className={styles.buyBtn}
+                      onClick={() => addToCart(sweet)}
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p style={{ textAlign: 'center', width: '100%', padding: '2rem' }}>No bestseller products available.</p>
+            )}
+          </div>
+
+          <button
+            onClick={() => {
+              const container = document.getElementById('bestseller-slider');
+              if (container) container.scrollBy({ left: 320, behavior: 'smooth' });
+            }}
+            style={{
+              position: 'absolute', right: '10px', top: '55%', transform: 'translateY(-50%)',
+              zIndex: 20, background: 'rgba(255,255,255,0.8)', border: 'none', borderRadius: '50%',
+              width: '40px', height: '40px', cursor: 'pointer', boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem'
+            }}
+          >
+            &#8594;
+          </button>
         </div>
       </div>
 

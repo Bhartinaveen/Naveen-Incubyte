@@ -150,6 +150,12 @@ export const updateUserRole = async (userId, role) => {
     });
 };
 
+export const deleteUser = async (userId) => {
+    return authFetch(`/users/${userId}`, {
+        method: 'DELETE'
+    });
+};
+
 export const addDeliveryPartner = async (name, mobile) => {
     return authFetch('/delivery-partners/admin/add', {
         method: 'POST',
@@ -178,4 +184,22 @@ export const loginDeliveryPartner = async (name, uniqueId) => {
 
 export const getDeliveryPartnerMe = async () => {
     return authFetch('/delivery-partners/me');
+};
+
+export const getCategories = async () => {
+    const res = await fetch(`${API_URL}/categories`);
+    return res.json();
+};
+
+export const addCategory = async (name, image) => {
+    return authFetch('/categories', {
+        method: 'POST',
+        body: JSON.stringify({ name, image })
+    });
+};
+
+export const deleteCategory = async (id) => {
+    return authFetch(`/categories/${id}`, {
+        method: 'DELETE'
+    });
 };

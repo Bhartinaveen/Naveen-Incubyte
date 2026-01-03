@@ -75,3 +75,21 @@
     transform: translateY(-2px);
     box-shadow: 0 15px 25px -10px var(--primary-color);
 }
+
+.registerLink {
+    text-align: center;
+    margin-top: 1rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.registerLink a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+.registerLink a:hover {
+    text-decoration: underline;
+}

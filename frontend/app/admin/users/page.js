@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { getUsers, updateUserRole } from '../../../utils/api';
+import { getUsers, updateUserRole, deleteUser } from '../../../utils/api';
 import styles from './users.module.css';
 
 export default function UserManagement() {
@@ -52,6 +52,29 @@ export default function UserManagement() {
         }
     };
 
+    const handleDeleteUser = async (userId) => {
+        if (confirm('Are you sure you want to delete this user?')) {
+            try {
+                await deleteUser(userId);
+                setUsers(users.filter(u => u._id !== userId));
+                alert('User deleted successfully');
+            } catch (err) {
+                console.error(err);
+                alert('Failed to delete user');
+            }
+        }
+    };
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const usersPerPage = 10;
+
+    // Calculate current users
+    const indexOfLastUser = currentPage * usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
     if (loading) return <div>Loading users...</div>;
 
     return (
@@ -67,7 +90,7 @@ export default function UserManagement() {
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map(user => (
+                    {currentUsers.map(user => (
                         <tr key={user._id}>
                             <td>{user.username}</td>
                             <td>{user.email}</td>
@@ -76,14 +99,30 @@ export default function UserManagement() {
                             </td>
                             <td>
                                 {user.role !== 'superadmin' && (
-                                    <select
-                                        value={user.role}
-                                        onChange={(e) => handleRoleChange(user._id, e.target.value)}
-                                        className={styles.select}
-                                    >
-                                        <option value="user">User</option>
-                                        <option value="admin">Admin</option>
-                                    </select>
+                                    <div style={{ display: 'flex', gap: '10px' }}>
+                                        <select
+                                            value={user.role}
+                                            onChange={(e) => handleRoleChange(user._id, e.target.value)}
+                                            className={styles.select}
+                                        >
+                                            <option value="user">User</option>
+                                            <option value="admin">Admin</option>
+                                        </select>
+                                        <button
+                                            onClick={() => handleDeleteUser(user._id)}
+                                            className={styles.deleteBtn}
+                                            style={{
+                                                backgroundColor: '#ff4d4d',
+                                                color: 'white',
+                                                border: 'none',
+                                                padding: '5px 10px',
+                                                borderRadius: '4px',
+                                                cursor: 'pointer'
+                                            }}
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
                                 )}
                                 {user.role === 'superadmin' && <span>(Super Admin)</span>}
                             </td>
@@ -91,6 +130,24 @@ export default function UserManagement() {
                     ))}
                 </tbody>
             </table>
+
+            <div className={styles.pagination} style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
+                <button
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    style={{ padding: '8px 16px', cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}
+                >
+                    Previous
+                </button>
+                <span style={{ padding: '8px' }}>Page {currentPage}</span>
+                <button
+                    onClick={() => setCurrentPage(prev => (indexOfLastUser < users.length ? prev + 1 : prev))}
+                    disabled={indexOfLastUser >= users.length}
+                    style={{ padding: '8px 16px', cursor: indexOfLastUser >= users.length ? 'not-allowed' : 'pointer' }}
+                >
+                    Next
+                </button>
+            </div>
         </div>
     );
 }

@@ -1,24 +1,28 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { getSweets, addSweet, deleteSweet, updateSweet } from '../../../utils/api';
+import { getSweets, addSweet, deleteSweet, updateSweet, getCategories, addCategory, deleteCategory } from '../../../utils/api';
 import styles from './inventory.module.css';
 
 export default function Inventory() {
     const [sweets, setSweets] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [showAddForm, setShowAddForm] = useState(false);
+    const [showCategoryForm, setShowCategoryForm] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [formData, setFormData] = useState({
-        name: '', category: '', price: '', costPrice: '', originalPrice: '', quantity: '',
+        name: '', category: '', price: '', originalPrice: '', quantity: '',
         description: '', image: '', expiryDate: '', batchNumber: ''
     });
+    const [categoryFormData, setCategoryFormData] = useState({ name: '', image: '' });
 
     useEffect(() => {
         fetchData();
     }, []);
 
     const fetchData = async () => {
-        const data = await getSweets();
-        setSweets(data);
+        const [sweetsData, categoriesData] = await Promise.all([getSweets(), getCategories()]);
+        setSweets(sweetsData);
+        if (Array.isArray(categoriesData)) setCategories(categoriesData);
     };
 
     const handleDelete = async (id) => {
@@ -36,7 +40,6 @@ export default function Inventory() {
             name: sweet.name,
             category: sweet.category,
             price: sweet.price,
-            costPrice: sweet.costPrice || '',
             originalPrice: sweet.originalPrice || '',
             quantity: sweet.quantity,
             description: sweet.description || '',
@@ -63,13 +66,36 @@ export default function Inventory() {
             setShowAddForm(false);
             setEditingId(null);
             setFormData({
-                name: '', category: '', price: '', costPrice: '', originalPrice: '', quantity: '',
+                name: '', category: '', price: '', originalPrice: '', quantity: '',
                 description: '', image: '', expiryDate: '', batchNumber: ''
             });
             fetchData();
         } else {
             alert('Error saving product');
         }
+    };
+
+    const handleAddCategory = async (e) => {
+        e.preventDefault();
+        if (!categoryFormData.name || !categoryFormData.image) {
+            alert('Please fill all fields');
+            return;
+        }
+        const res = await addCategory(categoryFormData.name, categoryFormData.image);
+        if (res.name) {
+            alert('Category Added!');
+            setShowCategoryForm(false);
+            setCategoryFormData({ name: '', image: '' });
+            fetchData();
+        } else {
+            alert('Error adding category');
+        }
+    };
+
+    const handleDeleteCategory = async (id) => {
+        if (!confirm('Delete this category? Products in this category will remain but the category tag might need updating.')) return;
+        await deleteCategory(id);
+        fetchData();
     };
 
     const checkExpiry = (date) => {
@@ -100,17 +126,68 @@ export default function Inventory() {
         <div className={styles.container}>
             <div className={styles.header}>
                 <h1>Admin: Inventory Management</h1>
-                <button className={styles.addBtn} onClick={() => {
-                    setShowAddForm(!showAddForm);
-                    setEditingId(null);
-                    setFormData({
-                        name: '', category: '', price: '', costPrice: '', originalPrice: '', quantity: '',
-                        description: '', image: '', expiryDate: '', batchNumber: ''
-                    });
-                }}>
-                    {showAddForm ? 'Cancel' : '+ Add New Product'}
-                </button>
+                <div>
+                    <button className={styles.addBtn} onClick={() => {
+                        setShowAddForm(!showAddForm);
+                        setEditingId(null);
+                        setFormData({
+                            name: '', category: '', price: '', originalPrice: '', quantity: '',
+                            description: '', image: '', expiryDate: '', batchNumber: ''
+                        });
+                    }}>
+                        {showAddForm ? 'Cancel' : '+ Add New Product'}
+                    </button>
+                    <button className={styles.addBtn} style={{ marginLeft: '10px', background: '#fbbf24', color: '#000' }} onClick={() => {
+                        setShowAddForm(true);
+                        setEditingId(null);
+                        setFormData({
+                            name: '', category: 'Bestseller', price: '', originalPrice: '', quantity: '',
+                            description: '', image: '', expiryDate: '', batchNumber: ''
+                        });
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}>
+                        + Add Bestseller
+                    </button>
+                    <button className={styles.addBtn} style={{ marginLeft: '10px', background: '#ec4899', color: '#fff' }} onClick={() => setShowCategoryForm(!showCategoryForm)}>
+                        {showCategoryForm ? 'Cancel Category' : '+ Add Category'}
+                    </button>
+                </div>
             </div>
+
+            {/* Category Form */}
+            {showCategoryForm && (
+                <div className={styles.addForm} style={{ background: '#fdf2f8', border: '1px solid #fbcfe8' }}>
+                    <h2>Add New Category (Shop Our Range)</h2>
+                    <form onSubmit={handleAddCategory} className={styles.formGrid} style={{ gridTemplateColumns: '1fr 1fr 1fr auto' }}>
+                        <input
+                            placeholder="Category Name"
+                            value={categoryFormData.name}
+                            onChange={e => setCategoryFormData({ ...categoryFormData, name: e.target.value })}
+                            required
+                        />
+                        <input
+                            placeholder="Image URL"
+                            value={categoryFormData.image}
+                            onChange={e => setCategoryFormData({ ...categoryFormData, image: e.target.value })}
+                            required
+                        />
+                        <button type="submit" className={styles.submitBtn} style={{ margin: '0', background: '#ec4899' }}>Add Category</button>
+                    </form>
+
+                    {/* List of Categories to Manage */}
+                    <div style={{ marginTop: '1rem', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        {categories.map(cat => (
+                            <div key={cat._id} style={{ padding: '5px 10px', background: '#fff', border: '1px solid #ddd', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span>{cat.name}</span>
+                                <button
+                                    onClick={() => handleDeleteCategory(cat._id)}
+                                    style={{ background: 'none', border: 'none', color: 'red', cursor: 'pointer', fontWeight: 'bold' }}
+                                >×</button>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             {showAddForm && (
                 <form onSubmit={handleAdd} className={styles.addForm}>
@@ -124,13 +201,14 @@ export default function Inventory() {
                             style={{ padding: '0.8rem', borderRadius: '4px', border: '1px solid #ccc' }}
                         >
                             <option value="" disabled>Select Category</option>
-                            {['Chocolate', 'Gummy', 'Hard Candy', 'Bakery', 'Classic', 'Dried Fruits', 'Gifting', 'Sugar Free'].map(cat => (
-                                <option key={cat} value={cat}>{cat}</option>
+                            <option value="Bestseller" style={{ fontWeight: 'bold', color: '#fbbf24' }}>Bestseller</option>
+                            {categories.map(cat => (
+                                <option key={cat._id} value={cat.name}>{cat.name}</option>
                             ))}
                         </select>
                         <input type="number" placeholder="MRP / Original Price (₹)" value={formData.originalPrice} onChange={e => setFormData({ ...formData, originalPrice: e.target.value })} />
                         <input type="number" placeholder="Sale Price (₹)" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} required />
-                        <input type="number" placeholder="Cost Price (₹)" value={formData.costPrice} onChange={e => setFormData({ ...formData, costPrice: e.target.value })} required />
+
                         <input type="number" placeholder="Quantity" value={formData.quantity} onChange={e => setFormData({ ...formData, quantity: e.target.value })} required />
                         <input placeholder="Image URL (Optional)" value={formData.image} onChange={e => setFormData({ ...formData, image: e.target.value })} />
                         <input placeholder="Batch Number" value={formData.batchNumber} onChange={e => setFormData({ ...formData, batchNumber: e.target.value })} />
